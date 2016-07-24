@@ -1,0 +1,18 @@
+
+<div class="sub-nav">
+<h3>select <span>category</span></h3>
+    <ul>
+        <? foreach ($this->categories as $category): ?>
+        <li>
+            <a href="
+                        <?= $this->url(
+                        array('categoryIdent' => $category->ident), //define parameters for building the link through a route
+                        'catalog_category', //define the route to use for build
+                        true //bool replace default route values with these
+                        );?>
+                    ">
+                        <?=$category->name; ?></a>
+        </li>
+        <? endforeach; ?>
+    </ul>
+</div>
