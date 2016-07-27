@@ -52,9 +52,13 @@
                         </ul>
                 </div>
             <? endif; ?>
+            <div>
+                <h3>Items in your <span>cart:</span></h3>
+                <?= $this->Cart()->getSummary(); ?>
+            </div>
         </div>
         <div class="content left">
-            <?= $this->layout()->content ?> 
+            <?= $this->layout()->content ?>
        </div>
     </div>
     
