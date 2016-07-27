@@ -19,14 +19,14 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
     }
 
     public function addItem(
-        Storefront_Resource_ProductImage_Item_Interface $product, $qty
+        Storefront_Resource_Product_Item_Interface $product, $qty
     )
     {
         if(0 > $qty){
             return false;
         }
         if(0 == $qty){
-            $this->remoteItem($product);
+            $this->removeItem($product);
             return false;
         }
 
@@ -92,7 +92,14 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
         $this->_total = $this->_subTotal + (float) $this->_shipping;
     }
 
-    public function setShippingCost()
+    public function setShippingCost($cost)
+    {
+        $this->_shipping = $cost;
+        $this->CalculateTotals();
+        $this->persist();
+    }
+
+    public function getShippingCost()
     {
         $this->CalculateTotals();
         return $this->_shipping;

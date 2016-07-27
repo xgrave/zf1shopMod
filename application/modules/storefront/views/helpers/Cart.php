@@ -34,7 +34,7 @@ class Zend_View_Helper_Cart extends Zend_View_Helper_Abstract
             'default',
             true
         );
-        $html .= '">View Cart</a></p>"';
+        $html .= '">View Cart</a></p>';
         return $html;
     }
 
@@ -83,7 +83,7 @@ class Zend_View_Helper_Cart extends Zend_View_Helper_Abstract
 
         }
 
-        $cartTable->addSubForm('$qtys', 'qtys');
+        $cartTable->addSubForm($qtys, 'qtys');
 
         //add shipping options
         $cartTable->addElement('select', 'shipping', array(

@@ -14,7 +14,7 @@ class Storefront_Form_Cart_Table extends SF_Form_Abstract
         $this->setDecorators(array(
             array(
                 'ViewScript',
-                array('viewScript' => 'cart/cart.phtml')
+                array('viewScript' => 'cart/_cart.phtml')
             ),
             'Form'
         ));
