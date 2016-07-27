@@ -33,6 +33,7 @@
     </p>
     <p>
         <?= $this->productPrice($product); ?>
+        <?= $this->Cart()->addForm($product); ?>
     </p>
 </div>
 <? endforeach; ?>
