@@ -9,94 +9,84 @@ class Storefront_Form_User_Base extends Zend_Form
 {
     public function init()
     {
-        //add path to custom validator rules
-        $this->addElementPrefixPath('Storefront_Validate', APPLICATION_PATH . '/modules/storefront/models/validate/', 'validate');
+        // add path to custom validators
+        $this->addElementPrefixPath(
+            'Storefront_Validate',
+            APPLICATION_PATH . '/modules/storefront/models/validate/',
+            'validate'
+        );
 
         $this->addElement('select', 'title', array(
-            'required' => 'true',
-            'label' => 'Title',
-            'multiOptions' => array('Mr' => 'Mr', 'Ms' => 'Ms', 'Miss' => 'Miss', 'Mrs' => 'Mrs'),
+            'required'   => true,
+            'label'      => 'Title',
+            'multiOptions' => array('Mr' => 'Mr','Ms' => 'Ms','Miss' => 'Miss','Mrs' => 'Mrs'),
         ));
 
         $this->addElement('text', 'firstname', array(
-            'filters' => array('StringTrim'),
-            'validators' => array(
-                'Alpha',
-                array('StringLength', true, array(3, 128))
-                ),
-                'required' => true,
-                'label' => 'Firstname',
-        ));
-
-        $this->addElement('text', 'lastname', array(
-            'filters' => array('StringTrim'),
+            'filters'    => array('StringTrim'),
             'validators' => array(
                 'Alpha',
                 array('StringLength', true, array(3, 128))
             ),
-            'required' => true,
-            'label' => 'lastname',
+            'required'   => true,
+            'label'      => 'Firstname',
+        ));
+
+        $this->addElement('text', 'lastname', array(
+            'filters'    => array('StringTrim'),
+            'validators' => array(
+                'Alpha',
+                array('StringLength', true, array(3, 128))
+            ),
+            'required'   => true,
+            'label'      => 'lastname',
         ));
 
         $this->addElement('text', 'email', array(
-            'filters' => array('StringTrim', 'StringToLower'),
+            'filters'    => array('StringTrim', 'StringToLower'),
             'validators' => array(
                 array('StringLength', true, array(3, 128)),
                 array('EmailAddress'),
                 array('UniqueEmail', false, array(new Storefront_Model_User())),
             ),
-            'required' => true,
-            'label' => 'Email'
+            'required'   => true,
+            'label'      => 'Email',
         ));
 
         $this->addElement('password', 'passwd', array(
-            'filters' => array('StringTrim'),
+            'filters'    => array('StringTrim'),
             'validators' => array(
-                array('StringLength', true, array(6,128))
+                array('StringLength', true, array(6, 128))
             ),
-            'required' => true,
-            'label' => 'Password',
+            'required'   => true,
+            'label'      => 'Password',
         ));
 
         $this->addElement('password', 'passwdVerify', array(
-            'filters' => array('StringTrim'),
+            'filters'    => array('StringTrim'),
             'validators' => array(
                 'PasswordVerification',
             ),
-            'required' => true,
-            'label' => 'Confirm Password',
+            'required'   => true,
+            'label'      => 'Confirm Password',
+        ));
+
+        $this->addElement('select', 'role', array(
+            'required'   => true,
+            'label'      => 'Role',
+            'multiOptions' => array('Customer' => 'Customer', 'Admin' => 'Admin'),
         ));
 
         $this->addElement('submit', 'submit', array(
             'required' => false,
-            'ignore' => true,
-            'decorators' => array(
-                'viewHelper',
-                array(
-                    'HtmlTag',
-                    array(
-                        'tag' => 'dd',
-                        'class' => 'form-submit'
-                    )
-                )
-            )
+            'ignore'   => true,
+            'decorators' => array('ViewHelper',array('HtmlTag', array('tag' => 'dd', 'id' => 'form-submit')))
         ));
 
         $this->addElement('hidden', 'userId', array(
-            'filters' => array(
-                'StringTrim'
-            ),
-            'required' => true,
-            'decorators' => array(
-                'viewHelper',
-                array(
-                    'HtmlTag',
-                    array(
-                        'tag' => 'dd',
-                        'class' => 'noDisplay' //workaround for zend bug to hide whitespace of dd
-                    )
-                )
-            )
+            'filters'    => array('StringTrim'),
+            'required'   => true,
+            'decorators' => array('viewHelper',array('HtmlTag', array('tag' => 'dd', 'class' => 'noDisplay')))
         ));
 
     }
