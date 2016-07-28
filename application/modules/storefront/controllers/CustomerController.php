@@ -56,9 +56,22 @@ class Storefront_CustomerController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $userId = $this->_authService->getIdentity()->userId;//will come from session var
-        $this->view->user = $this->_model->getUserById($userId);
-        $this->view->userForm = $this->getUserForm()->populate($this->view->user->toArray()); //populate accepts an array of values
+        //$userId = $this->_authService->getIdentity()->userId;//will come from session var
+        //$this->view->user = $this->_model->getUserById($userId);
+        //$this->view->userForm = $this->getUserForm()->populate($this->view->user->toArray()); //populate accepts an array of values
+
+        //if (!$this->_model->checkAcl('updateUser')) {
+        //    return $this->_helper->redirectCommon('gotoLogin');
+        //}
+
+        $this->view->user = $this->_model->getUserById($this->_authService->getIdentity()->userId);
+
+        if (null === $this->view->user) {
+            throw new SF_Exception('Unknown user');
+        }
+
+        $this->view->userForm = $this->getUserForm()->populate($this->view->user->toArray());
+
     }
 
     public function saveAction()

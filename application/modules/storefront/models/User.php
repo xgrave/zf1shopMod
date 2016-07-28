@@ -5,8 +5,34 @@
  * Date: 7/23/16
  * Time: 8:38 PM
  */
-class Storefront_Model_User extends SF_Model_Abstract
+class Storefront_Model_User extends SF_Model_Acl_Abstract
 {
+    // ACL Calls //
+    public function getResourceId()
+    {
+        return 'User';
+    }
+
+    public function setAcl(SF_Acl_Interface $acl)
+    {
+        if (!$acl->has($this->getResourceId())) {
+            $acl->add($this)
+                ->allow('Guest', $this, array('register'))
+                ->allow('Customer', $this, array('saveUser'))
+                ->allow('Admin', $this);
+        }
+        $this->_acl = $acl;
+        return $this;
+    }
+
+    public function getAcl()
+    {
+        if(null === $this->_acl){
+            $this->setAcl(new Storefront_Model_Acl_Storefront()); //creates new instance that contains roles and calls setAcl to set permissions defined above
+        }
+        return $this->_acl;
+    }
+
     public function getUserById($id)
     {
         $id = (int) $id;
@@ -27,6 +53,9 @@ class Storefront_Model_User extends SF_Model_Abstract
 
     public function registerUser($post)
     {
+        if(!$this->checkAcl('register')){
+            throw new SF_Acl_Exception("Insufficient Rights");
+        }
         $form = $this->getForm('userRegister'); //userRegister is reweritten to User_Register to request Storefront_Form_User_Register
         return $this->_save(
             $form,
@@ -35,8 +64,11 @@ class Storefront_Model_User extends SF_Model_Abstract
         );
     }
 
-    public function saveUser($post)
+    public function saveUser($post, $validator = null)
     {
+        if(!$this->checkAcl('saveUser')){
+            throw new SF_Acl_Exception("Insufficient Rights");
+        }
         $form = $this->getForm('userEdit');//why do we need the form if we have all the kv pairs in post? post might only hold header/validation info - book bottom pg 186
         return $this->_save($form,$post);
     }
