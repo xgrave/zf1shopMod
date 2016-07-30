@@ -99,7 +99,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
     protected function _initRoutes()
     {
+        //init logging
         $this->_logger->info('Bootstrap ' . __METHOD__);
+
+        //init front controller
         $this->bootstrap('frontController');
 
         $router = $this->frontController->getRouter();
@@ -137,6 +140,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
 
         $router->addRoute('catalog_category', $route);
+
+        //admin context route
+        $route = new Zend_Controller_Router_Route(
+            'admin/:module/:controller/:action/*',
+            array(
+                'action' => 'index',
+                'controller' => 'admin',
+                'module' => 'storefront',
+                'isAdmin' => true
+            )
+        );
+        $router->addRoute('admin', $route);
 
     }
 }

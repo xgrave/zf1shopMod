@@ -76,7 +76,15 @@
         </li>
         <? if ('Admin' === $this->AuthInfo('role')): ?>
             <li>
-                <a href=""
+                <a href="
+                <?= $this->url(array(
+                    'controller' => 'admin',
+                    'action'     => 'index',
+                    'module'     => 'storefront'
+                ),
+                    'admin', true
+                );
+                ?>"
                    title="administration area">Admin</a>
             </li>
         <? endif; ?>
