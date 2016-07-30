@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: georgimorozov
- * Date: 7/25/16
- * Time: 12:39 PM
- */
 class Storefront_Validate_UniqueEmail extends Zend_Validate_Abstract
 {
     const EMAIL_EXISTS = 'emailExists';
@@ -13,7 +7,7 @@ class Storefront_Validate_UniqueEmail extends Zend_Validate_Abstract
         self::EMAIL_EXISTS => 'Email "%value%" already exists in our system',
     );
 
-    public function __construct(Storefront_Model_User $model) //new model is being instantiated when called from Base.php form when validating email
+    public function __construct(Storefront_Model_User $model)
     {
         $this->_model = $model;
     }
@@ -21,11 +15,10 @@ class Storefront_Validate_UniqueEmail extends Zend_Validate_Abstract
     public function isValid($value, $context = null)
     {
         $this->_setValue($value);
-        $currentUser = isset($context['userId']) ?
-            $this->_model->getUserById($context['userId']) : null;
+        $currentUser = isset($context['userId']) ? $this->_model->getUserById($context['userId']) : null;
         $user = $this->_model->getUserByEmail($value, $currentUser);
-
-        if(null === $user){
+        
+        if (null === $user) {
             return true;
         }
 

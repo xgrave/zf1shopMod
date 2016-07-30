@@ -1,19 +1,22 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: georgimorozov
- * Date: 7/25/16
- * Time: 3:09 PM
+ * The registration form
+ * 
+ * @category   Storefront
+ * @package    Storefront_Form
+ * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
+ * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 class Storefront_Form_User_Register extends Storefront_Form_User_Base
 {
     public function init()
     {
-        // call parent init
+        // make sure parent is called!
         parent::init();
 
-        //then specialize the form for our needs
+        // specialize this form
         $this->removeElement('userId');
         $this->getElement('submit')->setLabel('Register');
+        $this->removeElement('role');
     }
 }

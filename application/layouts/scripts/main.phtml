@@ -22,7 +22,7 @@
         </div>    
         
         <div id="logo" class="left">
-            <img src="/images/layout/logo.png" alt="Shop till you drop!" />
+            <img src="/images/layout/logo.png" alt="Shop till you drop..." />
         </div>
         
     </div>
@@ -30,35 +30,23 @@
     <div id="contentWrap" class="clearfix">
         <div class="left categorylist">
             <?= $this->layout()->categoryMain; ?>
-            <? if (0 < count($this->subCategories)) : ?>
-                <div class="sub-nav">
-                    <h3>in this <span>category</span></h3>
-                        <ul>
-                            <? foreach($this->subCategories as $category) : ?>
-                                <li>
-                                    <a href="
-                                        <?= $this->url(
-                                                        array(
-                                                            'categoryIdent' => $category->ident
-                                                        ),
-                                                        'catalog_category',
-                                                        'true'
-                                                    );
-                                        ?>
-                                    "><?= $category->name; ?>
-                                    </a>
-                                </li>
-                            <? endforeach; ?>
-                        </ul>
-                </div>
+            <? if (0 < count($this->subCategories)):?>
+            <div class="sub-nav">
+            <h3>in this <span>category</span></h3>
+                <ul>
+                    <? foreach ($this->subCategories as $category): ?>
+                    <li><a href="<?=$this->url(array('categoryIdent' => $category->ident), 'catalog_category', true );?>"><?=$category->name; ?></a></li>
+                    <? endforeach; ?>
+                </ul>
+            </div> 
             <? endif; ?>
             <div>
-                <h3>Items in your <span>cart:</span></h3>
+                <h3>in your <span>cart</span></h3>
                 <?= $this->Cart()->getSummary(); ?>
             </div>
         </div>
         <div class="content left">
-            <?= $this->layout()->content ?>
+            <?= $this->layout()->content ?> 
        </div>
     </div>
     
@@ -67,7 +55,7 @@
             <span class="rss"><a href="/rss" title="products feed">RSS 2.0</a></span>
         </div>
         <div class="right">
-            &#169; Georgi Morozov 2016
+            &#169; 2008 Keith Pope
         </div>
     </div>
 </body>

@@ -1,20 +1,25 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: georgimorozov
- * Date: 7/25/16
- * Time: 3:12 PM
+ * Storefront_Form_Register
+ *
+ * The registration form
+ *
+ * @category   Storefront
+ * @package    Storefront_Form
+ * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
+ * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 class Storefront_Form_User_Edit extends Storefront_Form_User_Base
 {
     public function init()
     {
-        //call parent init
-        parent::init(); //
+        //call the parent init
+        parent::init();
 
-        //specialize the form for our use
+        //customize the form
         $this->getElement('passwd')->setRequired(false);
         $this->getElement('passwdVerify')->setRequired(false);
         $this->getElement('submit')->setLabel('Save User');
+        $this->removeElement('role');
     }
 }

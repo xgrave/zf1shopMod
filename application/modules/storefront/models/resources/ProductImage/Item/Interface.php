@@ -1,13 +1,15 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: georgimorozov
- * Date: 7/22/16
- * Time: 4:17 PM
+ * Storefront_Resource_ProductImage_Item_Interface
+ * 
+ * @category   Storefront
+ * @package    Storefront_Model_Resource
+ * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
+ * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 interface Storefront_Resource_ProductImage_Item_Interface
 {
-    public function thumbnail();
-    public function full();
+    public function getThumbnail();
+    public function getFull();
     public function isDefault();
 }

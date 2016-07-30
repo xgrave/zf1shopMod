@@ -1,9 +1,11 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: georgimorozov
- * Date: 7/26/16
- * Time: 10:59 AM
+ * Cart Controller
+ *
+ * @category   Storefront
+ * @package    Storefront_Controllers
+ * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
+ * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 class Storefront_CartController extends Zend_Controller_Action
 {
@@ -18,25 +20,18 @@ class Storefront_CartController extends Zend_Controller_Action
 
     public function addAction()
     {
-        $product = $this->_catalogModel->getProductById(
-            $this->_getParam('productId')
-        );
+        $product = $this->_catalogModel->getProductById($this->_getParam('productId'));
 
-        if(null === $product){
-            throw new SF_Exception(
-                'Product could not be added to cart as it does not exists'
-            );
+        if (null === $product) {
+            throw new SF_Exception('Product could not be added to cart as it does not exist');
         }
 
-        $this->_cartModel->addItem(
-            $product, $this->_getParam('qty')
-        );
+        $this->_cartModel->addItem($product, $this->_getParam('qty'));
 
-        //redirect after adding item
-        $return = rtrim(
-            $this->getRequest()->getBaseUrl(), '/'
-        ) . $this->_getParam('returnto');
+        $return = rtrim($this->getRequest()->getBaseUrl(), '/') .
+            $this->_getParam('returnto');
         $redirector = $this->getHelper('redirector');
+
         return $redirector->gotoUrl($return);
     }
 
@@ -47,19 +42,18 @@ class Storefront_CartController extends Zend_Controller_Action
 
     public function updateAction()
     {
-        foreach($this->_getParam('quantity') as $id => $value)
-        {
+        foreach($this->_getParam('quantity') as $id => $value) {
             $product = $this->_catalogModel->getProductById($id);
-            if(null !== $product){
+            if (null !== $product) {
                 $this->_cartModel->addItem($product, $value);
             }
         }
 
-        $this->_cartModel->setShippingCost(
-            $this->_getParam('shipping')
-        );
+        /* Should really get from the shippingModel! */
+        $this->_cartModel->setShippingCost($this->_getParam('shipping'));
 
-        return $this->_helper->redirector('view'); // redirect to viewAction after updateAction completes
-
+        return $this->_helper->redirector('view');
     }
+
+    public function removeAction(){}
 }

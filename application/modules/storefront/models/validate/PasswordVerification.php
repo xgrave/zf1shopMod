@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: georgimorozov
- * Date: 7/25/16
- * Time: 1:03 PM
- */
 class Storefront_Validate_PasswordVerification extends Zend_Validate_Abstract
 {
     const NOT_MATCH = 'notMatch';
@@ -18,16 +12,17 @@ class Storefront_Validate_PasswordVerification extends Zend_Validate_Abstract
         $value = (string) $value;
         $this->_setValue($value);
 
-        if(is_array($context)){
-            if(isset($context['passwd'])
+        if (is_array($context)) {
+            if (isset($context['passwd'])
                 && ($value == $context['passwd']))
             {
                 return true;
-            } elseif (is_string($context) && ($value == $context)){
-                return true;
             }
-            $this->_error(self::NOT_MATCH);
-            return false;
+        } elseif (is_string($context) && ($value == $context)) {
+            return true;
         }
+
+        $this->_error(self::NOT_MATCH);
+        return false;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Modified TestHelper for the storefront application
+ * 
  * Zend Framework
  *
  * LICENSE
@@ -12,76 +14,75 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
- * @category   Zend
- * @package    Zend
- * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
+ * @author 	   Keith Pope
  */
 
 /**
- * Include PHPUnit dependencies
+ * Get PHPUnit
  */
-if (version_compare(PHPUnit_Runner_Version::id(), '4.0.0', '<')) {
-    require_once 'PHPUnit/Runner/Version.php';
+require_once 'PHPUnit/Framework.php';
+require_once 'PHPUnit/Framework/IncompleteTestError.php';
+require_once 'PHPUnit/Framework/TestCase.php';
+require_once 'PHPUnit/Framework/TestSuite.php';
+require_once 'PHPUnit/Runner/Version.php';
+require_once 'PHPUnit/TextUI/TestRunner.php';
+require_once 'PHPUnit/Util/Filter.php';
 
-    $phpunitVersion = PHPUnit_Runner_Version::id();
-    if ($phpunitVersion == '@package_version@' || version_compare($phpunitVersion, '3.5.5', '>=')) {
-        require_once 'PHPUnit/Autoload.php'; // >= PHPUnit 3.5.5
-    } else {
-        require_once 'PHPUnit/Framework.php'; // < PHPUnit 3.5.5
-    }
+/*
+ * Set error reporting level
+ */
+error_reporting( E_ALL | E_STRICT );
+
+/**
+ * Default timezone
+ */
+date_default_timezone_set('Europe/London');
+
+/*
+ * Set the include path
+ */
+$root  = realpath(dirname(__FILE__) . '/../');
+$paths = array(
+    get_include_path(),
+    "$root/library/Incu",
+    "$root/library",
+    "$root/tests",
+    "$root/application"
+);
+set_include_path(implode(PATH_SEPARATOR, $paths));
+
+defined('APPLICATION_PATH')
+    or define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
+
+/**
+ * Autoloader helpers
+ */
+function _SF_Autloader_SetUp() {
+    require_once 'Zend/Loader/Autoloader.php';
+    $loader = Zend_Loader_Autoloader::getInstance();
+    $loader->registerNamespace('SF_');
 }
 
-/*
- * Set error reporting to the level to which Zend Framework code must comply.
- */
-error_reporting(E_ALL | E_STRICT);
-
-/*
- * Determine the root, library, and tests directories of the framework
- * distribution.
- */
-$zfRoot        = realpath(dirname(dirname(__FILE__)));
-$zfCoreLibrary = "$zfRoot/library";
-$zfCoreTests   = "$zfRoot/tests";
-
-/*
- * Prepend the Zend Framework library/ and tests/ directories to the
- * include_path. This allows the tests to run out of the box and helps prevent
- * loading other copies of the framework code and tests that would supersede
- * this copy.
- */
-$path = array(
-    $zfCoreLibrary,
-    $zfCoreTests,
-    get_include_path()
-    );
-set_include_path(implode(PATH_SEPARATOR, $path));
-
-/*
- * Load the user-defined test configuration file, if it exists; otherwise, load
- * the default configuration.
- */
-if (is_readable($zfCoreTests . DIRECTORY_SEPARATOR . 'TestConfiguration.php')) {
-    require_once $zfCoreTests . DIRECTORY_SEPARATOR . 'TestConfiguration.php';
-} else {
-    require_once $zfCoreTests . DIRECTORY_SEPARATOR . 'TestConfiguration.php.dist';
+function _SF_Autloader_TearDown() {
+    Zend_Loader_Autoloader::resetInstance();
+    $loader = Zend_Loader_Autoloader::getInstance();
+    $loader->registerNamespace('SF_');
 }
 
 /**
- * Start output buffering, if enabled
+ * Init autoloader
  */
-if (defined('TESTS_ZEND_OB_ENABLED') && constant('TESTS_ZEND_OB_ENABLED')) {
-    ob_start();
-}
+_SF_Autloader_SetUp();
 
-/*
- * Unset global variables that are no longer needed.
+/**
+ * Start session now!
  */
-unset($zfRoot, $zfCoreLibrary, $zfCoreTests, $path);
+Zend_Session::start();
 
-// Suppress DateTime warnings
-date_default_timezone_set(@date_default_timezone_get());
-
+/**
+ * Ignore folders from code coverage etc
+ */
+PHPUnit_Util_Filter::addDirectoryToFilter("$root/tests");
+PHPUnit_Util_Filter::addDirectoryToFilter("$root/library/Zend");

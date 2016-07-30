@@ -1,14 +1,18 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: georgimorozov
- * Date: 7/27/16
- * Time: 7:30 PM
+ * Storefront_Form_Login
+ * 
+ * The login form
+ * 
+ * @category   Storefront
+ * @package    Storefront_Form
+ * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
+ * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 class Storefront_Form_User_Login extends SF_Form_Abstract
 {
     public function init()
-    {
+    {               
         $this->addElement('text', 'email', array(
             'filters'    => array('StringTrim', 'StringToLower'),
             'validators' => array(
@@ -18,7 +22,7 @@ class Storefront_Form_User_Login extends SF_Form_Abstract
             'required'   => true,
             'label'      => 'Email',
         ));
-
+        
         $this->addElement('password', 'passwd', array(
             'filters'    => array('StringTrim'),
             'validators' => array(

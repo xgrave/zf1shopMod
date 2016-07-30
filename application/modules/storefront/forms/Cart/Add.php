@@ -1,9 +1,11 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: georgimorozov
- * Date: 7/26/16
- * Time: 12:15 PM
+ * Add to cart form
+ *
+ * @category   Storefront
+ * @package    Storefront_Form
+ * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
+ * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 class Storefront_Form_Cart_Add extends SF_Form_Abstract
 {
@@ -18,7 +20,7 @@ class Storefront_Form_Cart_Add extends SF_Form_Abstract
             'FormElements',
             'Form'
         ));
-
+        
         $this->addElement('text', 'qty', array(
             'decorators' => array(
                 'ViewHelper'
@@ -31,7 +33,7 @@ class Storefront_Form_Cart_Add extends SF_Form_Abstract
             'decorators' => array(
                 'ViewHelper'
             ),
-            'label' => 'Add to Cart'
+            'label' => 'Add to cart'
         ));
 
         $this->addElement('hidden', 'productId', array(
@@ -39,8 +41,7 @@ class Storefront_Form_Cart_Add extends SF_Form_Abstract
                 'ViewHelper'
             ),
         ));
-
-        $this->addElement('hidden', 'returnTo', array(
+        $this->addElement('hidden', 'returnto', array(
             'decorators' => array(
                 'ViewHelper'
             ),

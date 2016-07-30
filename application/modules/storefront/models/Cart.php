@@ -1,97 +1,160 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: georgimorozov
- * Date: 7/25/16
- * Time: 4:47 PM
+ * Storefront_Model_Cart
+ *
+ * @category   Storefront
+ * @package    Storefront_Model
+ * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
+ * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterator, Countable, ArrayAccess
 {
+   /**
+     * The cart item objects
+     *
+     * @var array
+     */
     protected $_items = array();
+    
+    /**
+     * Total before shipping
+     * @var decimal
+     */
     protected $_subTotal = 0;
+
+    /**
+     * Total with shipping
+     * @var decimal
+     */
     protected $_total = 0;
+
+    /**
+     * The shipping cost
+     * @var decimal
+     */
     protected $_shipping = 0;
+
+    /**
+     * ZNS for Persistance
+     * 
+     * @var Zend_Session_Namespace
+     */
     protected $_sessionNamespace;
 
+    /**
+     * Called from the __construct defined by model abstract
+     */
     public function init()
     {
         $this->loadSession();
     }
 
-    public function addItem(
-        Storefront_Resource_Product_Item_Interface $product, $qty
-    )
+    /**
+     * Adds or updates an item contained with the shopping cart
+     *
+     * @param Storefront_Resource_Product_Item_Interface $product
+     * @param int $qty
+     * @return Storefront_Resource_Cart_Item
+     */
+    public function addItem(Storefront_Resource_Product_Item_Interface $product, $qty)
     {
-        if(0 > $qty){
+        if (0 > $qty) {
             return false;
         }
-        if(0 == $qty){
+
+        if (0 == $qty) {
             $this->removeItem($product);
             return false;
         }
-
-        $item = new Storefront_Resource_Cart_Item(
-            $product, $qty
-        );
-
+        
+        $item = new Storefront_Resource_Cart_Item($product, $qty);   
         $this->_items[$item->productId] = $item;
         $this->persist();
         return $item;
     }
 
+    /**
+     * Remove an item for the shopping cart
+     * 
+     * @param int|Storefront_Resource_Product_Item_Interface $product
+     */
     public function removeItem($product)
     {
-        if(is_int($product)){
+        if (is_int($product)) {
             unset($this->_items[$product]);
         }
 
-        if($product instanceof Storefront_Resource_Product_Item_Interface){
+        if ($product instanceof Storefront_Resource_Product_Item_Interface) {
             unset($this->_items[$product->productId]);
         }
-
+        
         $this->persist();
     }
 
+    /**
+     * Setter for the session namespace
+     * 
+     * @param Zend_Session_Namespace $ns 
+     */
     public function setSessionNs(Zend_Session_Namespace $ns)
     {
         $this->_sessionNamespace = $ns;
     }
-
+    
+    /**
+     * Getter for session namespace
+     * 
+     * @return  Zend_Session_Namespace
+     */
     public function getSessionNs()
     {
-        if(null === $this->_sessionNamespace){
+        if (null === $this->_sessionNamespace) {
             $this->setSessionNs(new Zend_Session_Namespace(__CLASS__));
         }
         return $this->_sessionNamespace;
     }
 
+    /**
+     * Persist the cart data in the session
+     */
     public function persist()
     {
         $this->getSessionNs()->items = $this->_items;
         $this->getSessionNs()->shipping = $this->getShippingCost();
     }
 
+    /**
+     * Load any presisted data
+     */
     public function loadSession()
     {
-        if(isset($this->getSessionNs()->items)){
+        if (isset($this->getSessionNs()->items)) {
             $this->_items = $this->getSessionNs()->items;
         }
-
-        if(isset($this->getSessionNs()->shipping)){
+        if (isset($this->getSessionNs()->shipping)) {
             $this->setShippingCost($this->getSessionNs()->shipping);
         }
     }
 
-    public function calculateTotals()
+    /**
+     * Calculate the totals
+     */
+    public function CalculateTotals()
     {
         $sub = 0;
-        foreach($this as $item){
+        foreach ($this as $item) {
             $sub = $sub + $item->getLineCost();
         }
+
         $this->_subTotal = $sub;
         $this->_total = $this->_subTotal + (float) $this->_shipping;
     }
 
+    /**
+     * Set the shipping cost
+     *
+     * @param float $cost
+     */
     public function setShippingCost($cost)
     {
         $this->_shipping = $cost;
@@ -99,25 +162,39 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
         $this->persist();
     }
 
+    /**
+     * Get the shipping cost
+     * 
+     * @return float 
+     */
     public function getShippingCost()
     {
         $this->CalculateTotals();
         return $this->_shipping;
     }
 
+    /**
+     * Get the sub total
+     * 
+     * @return float 
+     */
     public function getSubTotal()
     {
         $this->CalculateTotals();
         return $this->_subTotal;
     }
 
+    /**
+     * Get the basket total
+     * 
+     * @return float
+     */
     public function getTotal()
     {
-        $this->calculateTotals();
+        $this->CalculateTotals();
         return $this->_total;
     }
 
-    //include prebuilt from tutorial to extend  core php classes
     /**
      * Does the given offset exist?
      *
@@ -164,7 +241,7 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
     /**
      * Returns the current row.
      *
-     * @return array|boolean current row
+     * @return array|boolean current row 
      */
     public function current()
     {

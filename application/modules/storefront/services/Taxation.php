@@ -1,18 +1,23 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: georgimorozov
- * Date: 7/22/16
- * Time: 7:40 PM
+ * Storefront_Service_Taxation
+ * 
+ * Provides tax calculation service
+ * 
+ * @category   Storefront
+ * @package    Storefront_Service
+ * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
+ * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 class Storefront_Service_Taxation
 {
     const TAXRATE = 15;
-
-    public function addTax($amount){
+       
+    public function addTax($amount)
+    {
         $tax = ($amount*self::TAXRATE)/100;
         $amount = round($amount + $tax,2);
-
+        
         return $amount;
     }
 }

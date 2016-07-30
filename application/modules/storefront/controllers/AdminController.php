@@ -1,12 +1,21 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: georgimorozov
- * Date: 7/28/16
- * Time: 8:18 PM
+ * AdminController
+ * 
+ * @category   Storefront
+ * @package    Storefront_Controllers
+ * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
+ * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_AdminController extends Zend_Controller_Action
+class Storefront_AdminController extends Zend_Controller_Action 
 {
-    public function indexAction()
-    {}
+	/**
+	 * The default action - show the home page
+	 */
+	public function indexAction() 
+	{
+        if (!$this->_helper->acl('Admin')) {
+            throw new SF_Acl_Exception('Access Denied');
+        }
+	}
 }

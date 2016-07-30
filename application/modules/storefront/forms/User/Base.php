@@ -1,11 +1,13 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: georgimorozov
- * Date: 7/25/16
- * Time: 11:34 AM
+ * The base user form
+ *
+ * @category   Storefront
+ * @package    Storefront_Form
+ * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
+ * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Form_User_Base extends Zend_Form
+class Storefront_Form_User_Base extends SF_Form_Abstract
 {
     public function init()
     {
@@ -65,7 +67,7 @@ class Storefront_Form_User_Base extends Zend_Form
         $this->addElement('password', 'passwdVerify', array(
             'filters'    => array('StringTrim'),
             'validators' => array(
-                'PasswordVerification',
+               'PasswordVerification',
             ),
             'required'   => true,
             'label'      => 'Confirm Password',
@@ -83,11 +85,10 @@ class Storefront_Form_User_Base extends Zend_Form
             'decorators' => array('ViewHelper',array('HtmlTag', array('tag' => 'dd', 'id' => 'form-submit')))
         ));
 
-        $this->addElement('hidden', 'userId', array(
+         $this->addElement('hidden', 'userId', array(
             'filters'    => array('StringTrim'),
             'required'   => true,
             'decorators' => array('viewHelper',array('HtmlTag', array('tag' => 'dd', 'class' => 'noDisplay')))
         ));
-
     }
 }
