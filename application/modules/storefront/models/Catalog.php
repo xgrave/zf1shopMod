@@ -200,6 +200,24 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract
         return $new;
     }
 
+    public function saveProduct($data, $validator = null)
+    {
+        if(null === $validator){
+            $validator = 'add';
+        }
+
+        $validator = $this->getForm(
+            'catalogProduct' . ucfirst($validator)
+        );
+
+        if(!$validator->isValid($data)){
+            return false;
+        }
+        $data = $validator->getValues();
+
+        return $this->getResource('Product')->saveRow($data); //The saveRow() method is defined in the SF_Model_Db_Table_Abstract and is used by all database Models to save data. it returns the id
+    }
+
     public function deleteProduct($product)
     {
         if (!$this->checkAcl('deleteProduct')) {

@@ -16,7 +16,7 @@ class Storefront_Form_Catalog_Category_Select extends SF_Form_Abstract
         $categories = $this->getModel()->getCategories();
         $cats = array();
         foreach($categories as $category) {
-            $cats[$category->categoryId] = $category->name; 
+            $cats[$category->categoryId] = $category->name;
         }
 
         $this->addElement('select', 'categoryId', array(

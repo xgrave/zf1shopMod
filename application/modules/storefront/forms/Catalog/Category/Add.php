@@ -1,11 +1,9 @@
 <?php
 /**
- * Add new category
- *
- * @category   Storefront
- * @package    Storefront_Form
- * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
- * @license    http://www.thepopeisdead.com/license.txt     New BSD License
+ * Created by PhpStorm.
+ * User: georgimorozov
+ * Date: 7/30/16
+ * Time: 7:07 PM
  */
 class Storefront_Form_Catalog_Category_Add extends SF_Form_Abstract
 {
@@ -23,7 +21,7 @@ class Storefront_Form_Catalog_Category_Add extends SF_Form_Abstract
             APPLICATION_PATH . '/modules/storefront/models/filter/',
             'filter'
         );
-        
+
         $this->setMethod('post');
         $this->setAction('');
 
@@ -36,7 +34,7 @@ class Storefront_Form_Catalog_Category_Add extends SF_Form_Abstract
             'label' => 'Ident',
             'filters' => array('StringTrim','Ident'),
             'validators' => array(
-                    array('UniqueIdent', true, array($this->getModel(), 'getCategoryByIdent'))
+                array('UniqueIdent', true, array($this->getModel(), 'getCategoryByIdent'))
             ),
             'required' => true,
         ));
@@ -48,8 +46,8 @@ class Storefront_Form_Catalog_Category_Add extends SF_Form_Abstract
         $element = $form->getElement('categoryId');
         $element->clearDecorators()->loadDefaultDecorators();
         $element->setName('parentId')
-                ->setRequired(true)
-                ->setLabel('Select Parent');
+            ->setRequired(true)
+            ->setLabel('Select Parent');
         $this->addElement($element,'parentId');
 
         $this->addElement('submit', 'add', array(

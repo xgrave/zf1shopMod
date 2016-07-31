@@ -8,13 +8,9 @@
       <library name="PHARS">
         <CLASSES>
           <root url="phar://$MODULE_DIR$/library/Zend/Service/WindowsAzure/CommandLine/Scaffolders/DefaultScaffolder.phar/" />
-          <root url="phar://$MODULE_DIR$/tests/Zend/Loader/_files/classmap.phar/" />
-          <root url="phar://$MODULE_DIR$/tests/Zend/Loader/_files/Zend_LoaderTest.phar/" />
         </CLASSES>
         <SOURCES>
           <root url="phar://$MODULE_DIR$/library/Zend/Service/WindowsAzure/CommandLine/Scaffolders/DefaultScaffolder.phar/" />
-          <root url="phar://$MODULE_DIR$/tests/Zend/Loader/_files/classmap.phar/" />
-          <root url="phar://$MODULE_DIR$/tests/Zend/Loader/_files/Zend_LoaderTest.phar/" />
         </SOURCES>
       </library>
     </orderEntry>

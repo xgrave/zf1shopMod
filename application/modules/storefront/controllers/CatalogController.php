@@ -158,6 +158,24 @@ class Storefront_CatalogController extends Zend_Controller_Action
         return $redirector->gotoRoute(array('action' => 'productimages', 'id' => $product->productId), 'admin');
     }
 
+    public function addproductAction()
+    {
+        $this->view->productForm = $this->_getProductForm();
+    }
+    public function saveproductAction()
+    {
+        $request = $this->getRequest(); //get the request
+        if(!$request->isPost()){
+            return $this->_helper->redirector('addproduct');
+        }
+        if(false === ($id = $this->_catalogModel->saveProduct($request->getPost()))) {
+            $this->view->productForm = $this->_getProductForm();
+            return $this->render('addproduct');
+        }
+
+        $redirector = $this->getHelper('redirector');
+        return $redirector->gotoRoute(array('action' => 'productimages', 'id' => $id), 'admin');
+    }
     public function deleteproductAction()
     {
         if (false === ($id = $this->_getParam('id',false))) {
@@ -189,6 +207,21 @@ class Storefront_CatalogController extends Zend_Controller_Action
         $this->_forms['addCategory']->setMethod('post');
 
         return $this->_forms['addCategory'];
+    }
+
+    protected function _getProductForm()
+    {
+        $urlHelper = $this->_helper->getHelper('url');
+
+        $this->_forms['addProduct'] = $this->_catalogModel->getForm('catalogProductAdd');
+        $this->_forms['addProduct']->setAction($urlHelper->url(array(
+            'controller' => 'catalog',
+            'action' => 'saveproduct'
+            ),
+            'admin'
+        ));
+        $this->_forms['addProduct']->setMethod('post');
+        return $this->_forms['addProduct'];
     }
 
     protected function _getProductImageForm()
