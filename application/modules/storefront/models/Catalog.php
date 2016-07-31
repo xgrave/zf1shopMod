@@ -202,6 +202,9 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract
 
     public function saveProduct($data, $validator = null)
     {
+        if(!$this->checkAcl('saveProduct')){
+            throw new SF_Acl_Exception('Insufficient Rights');
+        }
         if(null === $validator){
             $validator = 'add';
         }

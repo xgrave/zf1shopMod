@@ -1,100 +1,62 @@
 <?php
 /**
- * Acl action helper used for when we want to control access to resources
- * that do not have a Model.
- *
- * @category   Storefront
- * @package    SF_Controller_Helper
- * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
- * @license    http://www.thepopeisdead.com/license.txt     New BSD License
+ * Created by PhpStorm.
+ * User: georgimorozov
+ * Date: 7/30/16
+ * Time: 11:38 PM
  */
 class SF_Controller_Helper_Acl extends Zend_Controller_Action_Helper_Abstract
 {
-    /**
-     * @var Zend_Acl
-     */
     protected $_acl;
-
-    /**
-     * @var string
-     */
     protected $_identity;
 
-    /**
-     * Init the acl instance for this module
-     */
     public function init()
     {
         $module = $this->getRequest()->getModuleName();
         $acl = ucfirst($module) . '_Model_Acl_' . ucfirst($module);
 
-        if (class_exists($acl)) {
-            $this->_acl = new $acl;
+        if(class_exists($acl)){
+            $this->_acl = new $acl; //load acl (list of roles and resources) into class
         }
-
-
     }
 
-    /**
-     * Get the current acl
-     * 
-     * @return Zend_Acl 
-     */
     public function getAcl()
     {
         return $this->_acl;
     }
 
-    /**
-     * Check the acl
-     * 
-     * @param string $resource
-     * @param string $privilege
-     * @return boolean 
-     */
-    public function isAllowed($resource=null, $privilege=null)
+    public function isAllowed($resource = null, $privilege = null)
     {
-        if (null === $this->_acl) {
+        if(null === $this->_acl){
             return null;
         }
-        return $this->_acl->isAllowed($this->getIdentity(), $resource, $privilege);
+
+        return $this->_acl->isAllowed($this->getIdentity(), $resource, $privilege); //infinite loop?
     }
 
-
-        /**
-     * Set the identity of the current request
-     *
-     * @param array|string|null|Zend_Acl_Role_Interface $identity
-     * @return SF_Controller_Helper_Acl
-     */
     public function setIdentity($identity)
     {
-        if (is_array($identity)) {
+        if(is_array($identity)) { //make a separate helper for this eventually?
             if (!isset($identity['role'])) {
                 $identity['role'] = 'Guest';
             }
             $identity = new Zend_Acl_Role($identity['role']);
-        } elseif (is_scalar($identity) && !is_bool($identity)) {
+        }elseif(is_scalar($identity) && !is_bool($identity)) {
             $identity = new Zend_Acl_Role($identity);
-        } elseif (null === $identity) {
+        }elseif(null === $identity){
             $identity = new Zend_Acl_Role('Guest');
-        } elseif (!$identity instanceof Zend_Acl_Role_Interface) {
-            throw new SF_Model_Exception('Invalid identity provided');
+        }elseif(!$identity instanceof Zend_Acl_Role_Interface){
+            throw new SF_Model_Exception('Invalid Identity Provided');
         }
         $this->_identity = $identity;
         return $this;
     }
 
-    /**
-     * Get the identity, if no ident use guest
-     *
-     * @return string
-     */
     public function getIdentity()
     {
-        if (null === $this->_identity) {
+        if(null === $this->_identity){
             $auth = Zend_Auth::getInstance();
-            if (!$auth->hasIdentity()) {
+            if(!$auth->hasIdentity()){
                 return 'Guest';
             }
             $this->setIdentity($auth->getIdentity());
@@ -102,10 +64,7 @@ class SF_Controller_Helper_Acl extends Zend_Controller_Action_Helper_Abstract
         return $this->_identity;
     }
 
-    /**
-     * Proxy to the isAllowed method
-     */
-    public function direct($resource=null, $privilege=null)
+    public function direct($resource = null, $privilege = null)
     {
         return $this->isAllowed($resource, $privilege);
     }

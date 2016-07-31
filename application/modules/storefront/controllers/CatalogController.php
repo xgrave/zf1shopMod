@@ -160,10 +160,16 @@ class Storefront_CatalogController extends Zend_Controller_Action
 
     public function addproductAction()
     {
+        if($this->_helper->acl('Admin')){ //acl refering to the property?
+            return $this->_helper->redirectCommon('gotoLogin');
+        }
         $this->view->productForm = $this->_getProductForm();
     }
     public function saveproductAction()
     {
+        if($this->_helper->acl('Admin')){
+            return $this->_helper->redirectCommon('gotoLogin');
+        }
         $request = $this->getRequest(); //get the request
         if(!$request->isPost()){
             return $this->_helper->redirector('addproduct');
